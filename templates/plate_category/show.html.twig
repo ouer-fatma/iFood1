@@ -1,0 +1,138 @@
+{% extends 'ClientInterface.html.twig' %}
+
+{% block title %} {{ plate_categorie.name }}{% endblock %}
+{% block navbar %}
+     <li class="nav-item "><a href="{{ path('home') }}" class="nav-link">Home</a></li>
+     <li class="nav-item active"><a href="{{ path('app_plate_category_index') }}" class="nav-link">Plates</a></li>
+     <li class="nav-item"><a href="services.html" class="nav-link">Services</a></li>
+     <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
+     <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+     <li class="nav-item dropdown">
+         <a class="nav-link dropdown-toggle" href="room.html" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
+         <div class="dropdown-menu" aria-labelledby="dropdown04">
+             <a class="dropdown-item" href="shop.html">Shop</a>
+             <a class="dropdown-item" href="product-single.html">Single Product</a>
+             <a class="dropdown-item" href="room.html">Cart</a>
+             <a class="dropdown-item" href="checkout.html">Checkout</a>
+         </div>
+     </li><li class="nav-item dropdown">
+     <a class="nav-link dropdown-toggle" href="room.html" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+     <div class="dropdown-menu" aria-labelledby="dropdown04">
+         <a class="dropdown-item" href="shop.html"><span class="icon icon-shopping_cart"></span></a>
+         <a class="dropdown-item" href="product-single.html">Single Product</a>
+         <a class="dropdown-item" href="room.html">Cart</a>
+         <a class="dropdown-item" href="checkout.html">Checkout</a>
+     </div>
+ </li>
+     <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+
+ {% endblock navbar %}
+{% block wholepage %}
+    <section class="ftco-menu mb-5 pb-5">
+    <div class="container">
+    <div class="row d-md-flex">
+    <div class="col-lg-12 ftco-animate p-md-5">
+    <div class="row">
+    {% if  plate_categorie.plates|length == 0 %}
+    <div class="col-md-12 nav-link-wrap mb-5">
+        <div class="nav ftco-animate nav-pills justify-content-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <div class="row justify-content-center mb-auto pb-5">
+                <div class="col-md-7 heading-section ftco-animate text-center">
+                    <h2 class="mb-4">{{ plate_categorie.name }}</h2>
+                    <p>No plates in this category check another category <a href="{{ path('app_plate_category_index') }}">here </a>.</p>
+                </div>
+         </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-md-12 d-flex align-items-center">
+
+    <div class="tab-content ftco-animate" id="v-pills-tabContent">
+
+    <div class="tab-pane fade show active" id="v-pills-0" role="tabpanel" aria-labelledby="v-pills-0-tab">
+    <div class="row">
+		          <div class="col-md-12 d-flex align-items-center">
+
+		            <div class="tab-content ftco-animate" id="v-pills-tabContent">
+
+		              <div class="tab-pane fade show active" id="v-pills-0" role="tabpanel" aria-labelledby="v-pills-0-tab">
+		              	<div class="row">
+         {% for plate in plate_categorie.plates %}
+
+        {{ app.session.set('plate', plate) }}
+           {% set plate = app.session.get('plate') %}
+						        	<div class="col-md-3" >
+						        		<div class="menu-entry">
+						    					<a href="#" class="img" style="background-image: url({{ asset('ClientInterface/images/menu-3.jpg') }})"></a>
+						    					<div class="text text-center pt-4">
+						    						<h3><a href="{{ path('app_plate_show', {'id': plate.id}) }}">{{ plate.name }}</a></h3>
+						    						<p style="  overflow: hidden;display: -webkit-box; -webkit-line-clamp: 3;-webkit-box-orient: vertical;">{{ plate.description }}</p>
+
+
+
+						    						<p class="price"><span>${{ plate.price }}</span></p>
+						    						 {% if plate.quantity() > 0 %}
+
+                                                            <input type="range" min="1" max="{{ plate.quantity }}" value="1" class="slider" style="cursor: pointer;"  oninput="myFunctions(this.value,{{ plate.id|json_encode() }})" id="{{"quantity"~plate.id}}">
+                                                            <p>Quantite : <span id="{{"demo"~plate.id}}">1</span></p>
+
+						    						<p><button onclick="quantityForm(document.getElementById('quantity'+{{ plate.id }}).value,{{ plate.id }})" class="btn btn-primary btn-outline-primary">Add to Cart</button></p>
+                                                    {% else  %}
+                                                         <p style="color: red">Out of Stock.</p>
+                                                    {% endif %}
+						    					</div>
+						    				</div>
+						        	</div>
+						        	{% else %}
+			 <div class="row justify-content-center mb-auto pb-5">
+            <div class="col-md-7 heading-section ftco-animate text-center">
+                <h2 class="mb-4">{{ plate_categorie.name }}</h2>
+                <p>No plates in this category check another category <a href="{{ path('app_plate_category_index') }}">here </a>.</p>
+            </div>
+        </div>
+                                    {% endfor %}
+		              	</div>
+		              </div>
+
+
+
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+               {% endif %}
+           </div>
+       </div>
+   </div>
+{% endblock wholepage %}
+{% block js %}
+ <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    function myFunctions(val,id) {
+        document.getElementById("demo"+id).innerHTML = val;
+
+    }
+</script>
+<script>
+     function quantityForm(range,id){
+        return $.ajax({
+        url: "{{ path('rangetest') }}",
+        async: false,
+        dataType: 'json',
+        data: {
+        'range' : range,
+        'id' : id
+        },
+        type: "GET",
+        success: function(data){
+        console.log(data); // this is currently returning FALSE
+
+        }
+        });
+        }
+        </script>
+{% endblock js %}

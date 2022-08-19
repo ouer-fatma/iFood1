@@ -1,0 +1,66 @@
+{% extends 'ClientInterface.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <div class="one-half img" style="background-image: url( {{ asset('ClientInterface/images/about.jpg') }}"></div>
+    <div class="one-half ftco-animate">
+        <div class="overlap">
+            <div class="heading-section ftco-animate ">
+                {% if app.user %}
+                <span class="subheading ftco-animate">Logged </span>
+                    <br>
+                    <span>
+                <h3>As {{ app.user.email }} <a class="btn btn-primary btn-outline-primary  px-5 py-3" href="{{ path('app_logout') }}"> LOGOUT <span class="icon icon-close"></span> </a>
+                      </h3>
+               </span>
+                {% else %}
+                <span class="subheading">Login</span>
+                <h2 class="mb-4">FILL FORM</h2>
+                {% endif %}
+            </div>
+            <div>
+                <p>
+                <form method="post" class="mt-5">
+                    <fieldset>
+
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+
+                        {% if app.user %}
+
+                        {% else %}
+                            <div class="row">
+                                <div class="col-12 mt-3">
+                                    <input type="email" value="{{ last_username }}" name="email" id="inputUsername" class="form-control" required autofocus placeholder="E-MAIL">
+                                </div>
+                                <div class="col-12 mt-3 mb-3">
+                                    <input type="password" name="password" id="inputPassword" class="form-control" required placeholder="PASSWORD">
+                                </div>
+
+                            </div>
+                            <div class="checkbox mb-3">
+                                <label>
+                                    <input type="checkbox" name="_remember_me"> Remember me
+                                </label>
+                            </div>
+                            <button class="btn btn-success" type="submit">
+                                Login
+                            </button>
+                        {% endif %}
+
+                        <input type="hidden" name="_csrf_token"
+                               value="{{ csrf_token('authenticate') }}"
+                        >
+
+
+
+                    </fieldset>
+                </form>
+                </p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

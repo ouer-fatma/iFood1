@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit PackLine{% endblock %}
+
+{% block body %}
+    <h1>Edit PackLine</h1>
+
+    {{ include('pack_line/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_pack_line_index') }}">back to list</a>
+
+    {{ include('pack_line/_delete_form.html.twig') }}
+{% endblock %}

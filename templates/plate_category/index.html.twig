@@ -1,0 +1,77 @@
+{% extends 'ClientInterface.html.twig' %}
+
+{% block title %}Categories{% endblock %}
+ {% block navbar %}
+     <li class="nav-item "><a href="{{ path('home') }}" class="nav-link">Home</a></li>
+     <li class="nav-item active"><a href="{{ path('app_plate_category_index') }}" class="nav-link">Plates</a></li>
+     <li class="nav-item"><a href="services.html" class="nav-link">Services</a></li>
+     <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
+     <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+     <li class="nav-item dropdown">
+         <a class="nav-link dropdown-toggle" href="room.html" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
+         <div class="dropdown-menu" aria-labelledby="dropdown04">
+             <a class="dropdown-item" href="shop.html">Shop</a>
+             <a class="dropdown-item" href="product-single.html">Single Product</a>
+             <a class="dropdown-item" href="room.html">Cart</a>
+             <a class="dropdown-item" href="checkout.html">Checkout</a>
+         </div>
+     </li><li class="nav-item dropdown">
+     <a class="nav-link dropdown-toggle" href="room.html" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+     <div class="dropdown-menu" aria-labelledby="dropdown04">
+         <a class="dropdown-item" href="shop.html"><span class="icon icon-shopping_cart"></span></a>
+         <a class="dropdown-item" href="product-single.html">Single Product</a>
+         <a class="dropdown-item" href="room.html">Cart</a>
+         <a class="dropdown-item" href="checkout.html">Checkout</a>
+     </div>
+ </li>
+     <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+
+ {% endblock navbar %}
+{% block wholepage %}
+    {% if  plate_categories|length == 0 %}
+    <div class="col-md-12 nav-link-wrap mb-5">
+        <div class="nav ftco-animate nav-pills justify-content-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <div class="row justify-content-center mb-auto pb-5">
+                <div class="col-md-7 heading-section ftco-animate text-center">
+                    <h2 class="mb-4">List of categories</h2>
+                    <p>No categories found try <a href="{{ path('app_plate_category_index') }}">refreshing </a>the page.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center mb-5 pb-3">
+                <div class="col-md-7 heading-section ftco-animate text-center">
+                    <h2 class="mb-4">RECENT FROM CATEGORIES</h2>
+                    <p>Each category has its unique products and each product can only have one category. Please select type of food you'd like  .</p>
+                </div>
+            </div>
+            <div class="row d-flex">
+        {% for plate_category in plate_categories %}
+
+            <div class="col-md-4 d-flex ftco-animate">
+                    <div class="blog-entry align-self-stretch">
+                        <a href="{{ path('app_plate_category_show',{ 'id':plate_category.id}) }}" class="block-20" style="background-image: url( {{ asset('ClientInterface/images/image_2.jpg') }}">
+                        </a>
+                        <div class="text py-4 d-block">
+                            <div class="meta">
+                                <div><a href="{{ path('app_plate_category_show',{ 'id':plate_category.id}) }}"><span class="icon-calendar-check-o"></span> Sept 10, 2018</a></div>
+                                <div><a href="{{ path('app_plate_category_show',{ 'id':plate_category.id}) }}"><span class="icon-shopping-cart"></span> {{ plate_category.plates|length }}</a></div>
+                                <div><a href="{{ path('app_plate_category_show',{ 'id':plate_category.id}) }}" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
+                            </div>
+                            <h3 class="heading mt-2"><a href="{{ path('app_plate_category_show',{ 'id':plate_category.id}) }}">{{ plate_category.name }}</a></h3>
+                            <p>{{ plate_category.description }}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+        {% endfor %}
+    {% endif %}
+
+{% endblock wholepage %}

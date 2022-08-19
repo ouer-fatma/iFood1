@@ -1,0 +1,9 @@
+{% extends 'ClientInterface.html.twig' %}
+
+{{ form_start(form) }}
+<div class="col-12 mt-3 mb-3">
+{{ form_widget(form) }}
+
+</div>
+<button  class="btn btn-primary p-3 px-xl-4 py-xl-3">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

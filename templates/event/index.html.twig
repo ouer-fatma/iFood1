@@ -1,0 +1,94 @@
+{% extends 'front-office.html.twig' %}
+
+{% block title %}Event index{% endblock %}
+{% block mainDiv %}
+    <fieldset class="fieldSet"  data-aos="flip-down" data-aos-delay="50"  data-aos-duration="1000">
+        <legend class="Legends"><h1 style="color:black;">Your Events  <a href="{{ path('app_event_new') }}">Create new</a>
+            </h1></legend>
+
+        {% block dynamicDiv %}
+            </h1>
+            <br>
+            {% for event in events %}
+                <div class="inner"  data-aos="flip-down"  data-aos-delay="50"  data-aos-duration="1000"
+                >
+                    {{ event.id }}
+                    {{ event.name }}
+                    {{ event.description }}
+                    {{ event.date ? event.date|date('Y-m-d H:i:s') : '' }}
+
+                    <a href="{{ path('app_event_show', {'id': event.id}) }}">Details</a>
+                    <a href="{{ path('app_event_edit', {'id': event.id}) }}">Edit</a>
+                </div>
+
+
+            {% else %}
+                nos records found..
+            {% endfor %}
+
+        {% endblock dynamicDiv %}
+
+
+    </fieldset>
+
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row d-flex">
+                <?PHP
+            foreach($ProduitList as $row){
+                if ($row['quantite'] != 0 )
+                {
+                    ?>
+
+                <div class="col-md-4 d-flex ftco-animate">
+                    <div class="blog-entry justify-content-end">
+                        <a href="blog-single.html" class="block-20" style="background-image: url('../img/<?php echo $row['image'] ?>');">
+                        </a>
+                        <div class="text">
+                            <div class="d-flex align-items-center mb-4 topp">
+                                <div class="two">
+                                    <span class="day"><?php echo $row['nom'] ?></span>
+                                </div>
+
+                            </div>
+                            <h3 class="heading"><a href="#"><?php echo $row['nom_categorie'] ?></a></h3>
+                            <p>Description : <?php echo $row['description'] ?></p>
+                            <p>Prix : <?php echo $row['prix'] ?> DT</p>
+                            <p>Disponible  : <?php echo $row['quantite'] ?></p>
+
+
+
+
+
+
+
+                            <p><form method="POST" action="../../Controllers/front/AjouterPanierC.php">
+
+                                <input type="hidden" value="<?php echo $row['id_produit'] ?>" name="id_produit">
+                                <input type="range" min="1" max="<?php echo $row['quantite']?>" value="1" class="slider" name ="quantite"id="quantite">
+                                <p>Quantite : <span id="demo"></span></p>
+                                <script>
+                                    var slider = document.getElementById("quantite");
+                                    var output = document.getElementById("demo");
+                                    output.innerHTML = slider.value;
+
+                                    slider.oninput = function() {
+                                        output.innerHTML = this.value;
+                                    }
+                                </script>
+
+                                <button class="btn btn-primary" type="submit">  <i class="fa fa-plus"> </i> </button>
+                            </form></p>
+                        </div>
+                    </div>
+                </div>
+                <?PHP
+                }
+            }
+            ?>
+            </div>
+        </div>
+    </section>
+
+{% endblock mainDiv %}
+
